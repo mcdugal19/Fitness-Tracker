@@ -32,17 +32,17 @@ const {
 } = require("../db");
 const client = require("../db/client");
 
-xdescribe("Database", () => {
+describe("Database", () => {
   beforeAll(async () => {
     await rebuildDB();
   });
   afterAll(async () => {
     await client.end();
   });
-  xdescribe("Users", () => {
+  describe("Users", () => {
     let userToCreateAndUpdate, queriedUser;
     let userCredentials = { username: "billybob", password: "bobbybadboy" };
-    xdescribe("createUser({ username, password })", () => {
+    describe("createUser({ username, password })", () => {
       beforeAll(async () => {
         userToCreateAndUpdate = await createUser(userCredentials);
         const { rows } = await client.query(
@@ -51,30 +51,30 @@ xdescribe("Database", () => {
         );
         queriedUser = rows[0];
       });
-      it("Creates the user", async () => {
+      xit("Creates the user", async () => {
         expect(userToCreateAndUpdate.username).toBe(userCredentials.username);
         expect(queriedUser.username).toBe(userCredentials.username);
       });
-      it("EXTRA CREDIT: Does not store plaintext password in the database", async () => {
+      xit("EXTRA CREDIT: Does not store plaintext password in the database", async () => {
         expect(queriedUser.password).not.toBe(userCredentials.password);
       });
-      it("EXTRA CREDIT: Hashes the password (salted 10 times) before storing it to the database", async () => {
+      xit("EXTRA CREDIT: Hashes the password (salted 10 times) before storing it to the database", async () => {
         const hashedVersion = bcrypt.compareSync(
           userCredentials.password,
           queriedUser.password
         );
         expect(hashedVersion).toBe(true);
       });
-      it("Does NOT return the password", async () => {
+      xit("Does NOT return the password", async () => {
         expect(userToCreateAndUpdate.password).toBeFalsy();
       });
     });
-    xdescribe("getUser({ username, password })", () => {
+    describe("getUser({ username, password })", () => {
       let verifiedUser;
       beforeAll(async () => {
         verifiedUser = await getUser(userCredentials);
       });
-      it("Verifies the passed-in, plain-text password against the password in the database (the hashed password, if this portion is complete)", async () => {
+      xit("Verifies the passed-in, plain-text password against the password in the database (the hashed password, if this portion is complete)", async () => {
         const unVerifiedUser = await getUser({
           username: userCredentials.username,
           password: "badPassword",
@@ -83,21 +83,21 @@ xdescribe("Database", () => {
         expect(verifiedUser.username).toBe(userCredentials.username);
         expect(unVerifiedUser).toBeFalsy();
       });
-      it("Does NOT return the password", async () => {
+      xit("Does NOT return the password", async () => {
         expect(verifiedUser.password).toBeFalsy();
       });
     });
-    xdescribe("getUserById", () => {
-      it("Gets a user based on the user Id", async () => {
+    describe("getUserById", () => {
+      xit("Gets a user based on the user Id", async () => {
         const user = await getUserById(userToCreateAndUpdate.id);
         expect(user).toBeTruthy();
         expect(user.id).toBe(userToCreateAndUpdate.id);
       });
     });
   });
-  xdescribe("Activities", () => {
-    xdescribe("getAllActivities", () => {
-      it("selects and returns an array of all activities", async () => {
+  describe("Activities", () => {
+    describe("getAllActivities", () => {
+      xit("selects and returns an array of all activities", async () => {
         const activities = await getAllActivities();
         const { rows: activitiesFromDatabase } = await client.query(`
         SELECT * FROM activities;
@@ -105,8 +105,8 @@ xdescribe("Database", () => {
         expect(activities).toEqual(activitiesFromDatabase);
       });
     });
-    xdescribe("createActivity({ name, description })", () => {
-      it("Creates and returns the new activity", async () => {
+    describe("createActivity({ name, description })", () => {
+      xit("Creates and returns the new activity", async () => {
         const activityToCreate = {
           name: "elliptical",
           description: "using the elliptical machine",
@@ -116,8 +116,8 @@ xdescribe("Database", () => {
         expect(createdActivity.description).toBe(activityToCreate.description);
       });
     });
-    xdescribe("updateActivity", () => {
-      it("Updates name and description of an activity without affecting the ID. Returns the updated Activity.", async () => {
+    describe("updateActivity", () => {
+      xit("Updates name and description of an activity without affecting the ID. Returns the updated Activity.", async () => {
         const [activityToUpdate] = await getAllActivities();
         activityToUpdate.name = "standing barbell curl";
         const activity = await updateActivity(activityToUpdate);
@@ -125,20 +125,20 @@ xdescribe("Database", () => {
       });
     });
   });
-  xdescribe("Routines", () => {
+  describe("Routines", () => {
     let routineToCreateAndUpdate;
-    xdescribe("getActivityById", () => {
-      it("gets activities by their id", async () => {
+    describe("getActivityById", () => {
+      xit("gets activities by their id", async () => {
         const activity = await getActivityById(1);
         expect(activity).toBeTruthy();
       });
     });
-    xdescribe("getAllRoutines", () => {
+    describe("getAllRoutines", () => {
       let routine;
       beforeAll(async () => {
         [routine] = await getAllRoutines();
       });
-      it("selects and returns an array of all routines, includes their activities", async () => {
+      xit("selects and returns an array of all routines, includes their activities", async () => {
         expect(routine).toEqual(
           expect.objectContaining({
             id: expect.any(Number),
@@ -150,14 +150,14 @@ xdescribe("Database", () => {
           })
         );
       });
-      it("includes username, from users join, aliased as creatorName", async () => {
+      xit("includes username, from users join, aliased as creatorName", async () => {
         expect(routine).toEqual(
           expect.objectContaining({
             creatorName: expect.any(String),
           })
         );
       });
-      it("includes duration and count on activities, from routine_activities join", async () => {
+      xit("includes duration and count on activities, from routine_activities join", async () => {
         const {
           activities: [firstActivity],
         } = routine;
@@ -169,12 +169,12 @@ xdescribe("Database", () => {
         );
       });
     });
-    xdescribe("getAllPublicRoutines", () => {
+    describe("getAllPublicRoutines", () => {
       let routine;
       beforeAll(async () => {
         [routine] = await getAllPublicRoutines();
       });
-      it("selects and returns an array of all public routines, includes their activities", async () => {
+      xit("selects and returns an array of all public routines, includes their activities", async () => {
         expect(routine).toEqual(
           expect.objectContaining({
             id: expect.any(Number),
@@ -187,14 +187,14 @@ xdescribe("Database", () => {
         );
         expect(routine.isPublic).toBe(true);
       });
-      it("includes username, from users join, aliased as creatorName", async () => {
+      xit("includes username, from users join, aliased as creatorName", async () => {
         expect(routine).toEqual(
           expect.objectContaining({
             creatorName: expect.any(String),
           })
         );
       });
-      it("includes duration and count on activities, from routine_activities join", async () => {
+      xit("includes duration and count on activities, from routine_activities join", async () => {
         const {
           activities: [firstActivity],
         } = routine;
@@ -206,13 +206,13 @@ xdescribe("Database", () => {
         );
       });
     });
-    xdescribe("getAllRoutinesByUser", () => {
+    describe("getAllRoutinesByUser", () => {
       let routine, user;
       beforeAll(async () => {
         user = await getUserById(1);
         [routine] = await getAllRoutinesByUser(user);
       });
-      it("selects and return an array of all routines made by user, includes their activities", async () => {
+      xit("selects and return an array of all routines made by user, includes their activities", async () => {
         expect(routine).toEqual(
           expect.objectContaining({
             id: expect.any(Number),
@@ -225,14 +225,14 @@ xdescribe("Database", () => {
         );
         expect(routine.creatorId).toBe(user.id);
       });
-      it("includes username, from users join, aliased as creatorName", async () => {
+      xit("includes username, from users join, aliased as creatorName", async () => {
         expect(routine).toEqual(
           expect.objectContaining({
             creatorName: expect.any(String),
           })
         );
       });
-      it("includes duration and count on activities, from routine_activities join", async () => {
+      xit("includes duration and count on activities, from routine_activities join", async () => {
         const {
           activities: [firstActivity],
         } = routine;
@@ -244,13 +244,13 @@ xdescribe("Database", () => {
         );
       });
     });
-    xdescribe("getPublicRoutinesByUser", () => {
+    describe("getPublicRoutinesByUser", () => {
       let routine, user;
       beforeAll(async () => {
         user = await getUserById(1);
         [routine] = await getPublicRoutinesByUser(user);
       });
-      it("selects and returns an array of all routines made by user, includes their activities", async () => {
+      xit("selects and returns an array of all routines made by user, includes their activities", async () => {
         expect(routine).toEqual(
           expect.objectContaining({
             id: expect.any(Number),
@@ -264,14 +264,14 @@ xdescribe("Database", () => {
         expect(routine.creatorId).toBe(user.id);
         expect(routine.isPublic).toBe(true);
       });
-      it("includes username, from users join, aliased as creatorName", async () => {
+      xit("includes username, from users join, aliased as creatorName", async () => {
         expect(routine).toEqual(
           expect.objectContaining({
             creatorName: expect.any(String),
           })
         );
       });
-      it("includes duration and count on activities, from routine_activities join", async () => {
+      xit("includes duration and count on activities, from routine_activities join", async () => {
         const {
           activities: [firstActivity],
         } = routine;
@@ -283,13 +283,13 @@ xdescribe("Database", () => {
         );
       });
     });
-    xdescribe("getPublicRoutinesByActivity", () => {
+    describe("getPublicRoutinesByActivity", () => {
       let routine, activity;
       beforeAll(async () => {
         activity = await getActivityById(3);
         [routine] = await getPublicRoutinesByActivity(activity);
       });
-      it("selects and return an array of public routines which have a specific activityId in their routine_activities join, includes their activities", async () => {
+      xit("selects and return an array of public routines which have a specific activityId in their routine_activities join, includes their activities", async () => {
         expect(routine).toEqual(
           expect.objectContaining({
             id: expect.any(Number),
@@ -302,14 +302,14 @@ xdescribe("Database", () => {
         );
         expect(routine.isPublic).toBe(true);
       });
-      it("includes username, from users join, aliased as creatorName", async () => {
+      xit("includes username, from users join, aliased as creatorName", async () => {
         expect(routine).toEqual(
           expect.objectContaining({
             creatorName: expect.any(String),
           })
         );
       });
-      it("includes duration and count on activities, from routine_activities join", async () => {
+      xit("includes duration and count on activities, from routine_activities join", async () => {
         const {
           activities: [firstActivity],
         } = routine;
@@ -321,8 +321,8 @@ xdescribe("Database", () => {
         );
       });
     });
-    xdescribe("createRoutine", () => {
-      it("creates and returns the new routine", async () => {
+    describe("createRoutine", () => {
+      xit("creates and returns the new routine", async () => {
         routineToCreateAndUpdate = await createRoutine({
           creatorId: 2,
           isPublic: true,
@@ -335,7 +335,7 @@ xdescribe("Database", () => {
         expect(routineToCreateAndUpdate).toEqual(queriedRoutine);
       });
     });
-    xdescribe("updateRoutine", () => {
+    describe("updateRoutine", () => {
       let queriedRoutine;
       beforeAll(async () => {
         routineToCreateAndUpdate = await updateRoutine({
@@ -346,18 +346,18 @@ xdescribe("Database", () => {
         });
         queriedRoutine = await getRoutineById(routineToCreateAndUpdate.id);
       });
-      it("Returns the updated routine", async () => {
+      xit("Returns the updated routine", async () => {
         expect(routineToCreateAndUpdate).toBeTruthy();
       });
-      it("Finds the routine with id equal to the passed in id. Does not update the routine id.", async () => {
+      xit("Finds the routine with id equal to the passed in id. Does not update the routine id.", async () => {
         expect(routineToCreateAndUpdate.id).toBe(queriedRoutine.id);
       });
-      it("Updates the public status, name, or goal, as necessary", async () => {
+      xit("Updates the public status, name, or goal, as necessary", async () => {
         expect(routineToCreateAndUpdate.isPublic).toBe(queriedRoutine.isPublic);
         expect(routineToCreateAndUpdate.name).toBe(queriedRoutine.name);
         expect(routineToCreateAndUpdate.goal).toBe(queriedRoutine.goal);
       });
-      it("Does not update fields that are not passed in", async () => {
+      xit("Does not update fields that are not passed in", async () => {
         const name = "Abs Day";
         routineToCreateAndUpdate = await updateRoutine({
           id: routineToCreateAndUpdate.id,
@@ -369,8 +369,8 @@ xdescribe("Database", () => {
         expect(routineToCreateAndUpdate.goal).toBe(queriedRoutine.goal);
       });
     });
-    xdescribe("destroyRoutine", () => {
-      it("removes routine from database", async () => {
+    describe("destroyRoutine", () => {
+      xit("removes routine from database", async () => {
         await destroyRoutine(routineToCreateAndUpdate.id);
         const {
           rows: [routine],
@@ -384,7 +384,7 @@ xdescribe("Database", () => {
         );
         expect(routine).toBeFalsy();
       });
-      it("Deletes all the routine_activities whose routine is the one being deleted.", async () => {
+      xit("Deletes all the routine_activities whose routine is the one being deleted.", async () => {
         const queriedRoutineActivities = await getRoutineActivitiesByRoutine(
           routineToCreateAndUpdate
         );
@@ -392,7 +392,7 @@ xdescribe("Database", () => {
       });
     });
   });
-  xdescribe("Routine Activities", () => {
+  describe("Routine Activities", () => {
     const routineActivityData = {
       routineId: 4,
       activityId: 8,
@@ -401,7 +401,7 @@ xdescribe("Database", () => {
     };
     let routineActivityToCreateAndUpdate;
     xdescribe("addActivityToRoutine({ routineId, activityId, count, duration })", () => {
-      it("creates a new routine_activity, and return it", async () => {
+      xit("creates a new routine_activity, and return it", async () => {
         routineActivityToCreateAndUpdate = await addActivityToRoutine(
           routineActivityData
         );
@@ -420,8 +420,8 @@ xdescribe("Database", () => {
         );
       });
     });
-    xdescribe("updateRoutineActivity({ id, count, duration })", () => {
-      it("Finds the routine with id equal to the passed in id. Updates the count or duration as necessary.", async () => {
+    describe("updateRoutineActivity({ id, count, duration })", () => {
+      xit("Finds the routine with id equal to the passed in id. Updates the count or duration as necessary.", async () => {
         const newRoutineActivityData = {
           id: routineActivityToCreateAndUpdate.id,
           count: 15,
@@ -441,8 +441,8 @@ xdescribe("Database", () => {
         );
       });
     });
-    xdescribe("destroyRoutineActivity(id)", () => {
-      it("remove routine_activity from database", async () => {
+    describe("destroyRoutineActivity(id)", () => {
+      xit("remove routine_activity from database", async () => {
         const deletedRoutine = await destroyRoutineActivity(
           routineActivityToCreateAndUpdate.id
         );

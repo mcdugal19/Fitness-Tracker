@@ -1,13 +1,14 @@
 // require in the database adapter functions as you write them (createUser, createActivity...)
+
 // const { } = require('./');
 const client = require("./client");
 
 async function dropTables() {
   console.log("Dropping All Tables...");
   await client.query(`
-      DROP TABLE IF EXISTS post_tags;
-      DROP TABLE IF EXISTS tags;
-      DROP TABLE IF EXISTS posts;
+      DROP TABLE IF EXISTS routine_activities;
+      DROP TABLE IF EXISTS routines;
+      DROP TABLE IF EXISTS activities;
       DROP TABLE IF EXISTS users;
     `);
   // drop all tables, in the correct order
@@ -20,25 +21,25 @@ async function createTables() {
     id SERIAL PRIMARY KEY,
     username varchar(255) UNIQUE NOT NULL,
     password varchar(255) NOT NULL,
-    name varchar(255) NOT NULL,
-    location varchar(255) NOT NULL,
-    active boolean DEFAULT true
   );
-  CREATE TABLE posts (
+  CREATE TABLE activities (
     id SERIAL PRIMARY KEY,
-    "authorId" INTEGER REFERENCES users(id),
-    title varchar(255) NOT NULL,
-    content TEXT NOT NULL,
-    active BOOLEAN DEFAULT true
+    name varchar(255) UNIQUE NOT NULL,
+    description TEXT NOT NULL,
   );
-  CREATE TABLE tags (
+  CREATE TABLE routines (
     id SERIAL PRIMARY KEY,
+    "creatorId"	INTEGER	FOREIGN KEY,
+    "isPublic"	BOOLEAN	DEFAULT false,
     name VARCHAR(255) UNIQUE NOT NULL
+    goal	TEXT	NOT NULL
   );
-  CREATE TABLE post_tags (
-    "postId" INTEGER REFERENCES posts(id),
-    "tagId" INTEGER REFERENCES tags(id),
-    unique("postId", "tagId")
+  CREATE TABLE routine_activities (
+    id	SERIAL	PRIMARY KEY
+    "routineId"	INTEGER	FOREIGN KEY
+    "activityId"	INTEGER	FOREIGN KEY
+    duration	INTEGER	
+    count	INTEGER
   );
 `);
 
@@ -223,10 +224,10 @@ async function createInitialRoutineActivities() {
 async function rebuildDB() {
   try {
     client.connect();
-    // await dropTables();
-    // await createTables();
-    // await createInitialUsers();
-    // await createInitialActivities();
+    await dropTables();
+    await createTables();
+    await createInitialUsers();
+    await createInitialActivities();
     // await createInitialRoutines();
     // await createInitialRoutineActivities();
   } catch (error) {

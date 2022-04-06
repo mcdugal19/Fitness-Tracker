@@ -1,3 +1,5 @@
+const client = require("./client");
+
 async function getRoutineById(id) {
   try {
     const {
@@ -39,7 +41,6 @@ async function getAllRoutines() {
       `
         SELECT *
         FROM routines
-        WHERE id=$1;
       `,
       [routine]
     );

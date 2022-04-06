@@ -51,7 +51,7 @@ describe("Database", () => {
         );
         queriedUser = rows[0];
       });
-      xit("Creates the user", async () => {
+      it("Creates the user", async () => {
         expect(userToCreateAndUpdate.username).toBe(userCredentials.username);
         expect(queriedUser.username).toBe(userCredentials.username);
       });
@@ -65,7 +65,7 @@ describe("Database", () => {
         );
         expect(hashedVersion).toBe(true);
       });
-      xit("Does NOT return the password", async () => {
+      it("Does NOT return the password", async () => {
         expect(userToCreateAndUpdate.password).toBeFalsy();
       });
     });
@@ -74,7 +74,7 @@ describe("Database", () => {
       beforeAll(async () => {
         verifiedUser = await getUser(userCredentials);
       });
-      xit("Verifies the passed-in, plain-text password against the password in the database (the hashed password, if this portion is complete)", async () => {
+      it("Verifies the passed-in, plain-text password against the password in the database (the hashed password, if this portion is complete)", async () => {
         const unVerifiedUser = await getUser({
           username: userCredentials.username,
           password: "badPassword",

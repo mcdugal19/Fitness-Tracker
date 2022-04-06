@@ -2,6 +2,9 @@
 
 // const { } = require('./');
 const client = require("./client");
+const { createUser } = require("./users");
+const { createActivity } = require("./activities");
+const { createRoutine } = require("./routines");
 
 async function dropTables() {
   console.log("Dropping All Tables...");
@@ -20,25 +23,25 @@ async function createTables() {
   CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     username varchar(255) UNIQUE NOT NULL,
-    password varchar(255) NOT NULL,
+    password varchar(255) NOT NULL
   );
   CREATE TABLE activities (
     id SERIAL PRIMARY KEY,
     name varchar(255) UNIQUE NOT NULL,
-    description TEXT NOT NULL,
+    description TEXT NOT NULL
   );
   CREATE TABLE routines (
     id SERIAL PRIMARY KEY,
-    "creatorId"	INTEGER	FOREIGN KEY,
+    "creatorId"	INTEGER	REFERENCES users(id),
     "isPublic"	BOOLEAN	DEFAULT false,
-    name VARCHAR(255) UNIQUE NOT NULL
+    name VARCHAR(255) UNIQUE NOT NULL,
     goal	TEXT	NOT NULL
   );
   CREATE TABLE routine_activities (
-    id	SERIAL	PRIMARY KEY
-    "routineId"	INTEGER	FOREIGN KEY
-    "activityId"	INTEGER	FOREIGN KEY
-    duration	INTEGER	
+    id	SERIAL	PRIMARY KEY,
+    "routineId"	INTEGER	REFERENCES routines(id),
+    "activityId"	INTEGER	REFERENCES activities(id),
+    duration	INTEGER	,
     count	INTEGER
   );
 `);

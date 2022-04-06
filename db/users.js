@@ -13,21 +13,28 @@ async function createUser({ username, password }) {
         `,
       [username, password]
     );
-
+    console.log("user that got created", user);
     return user;
   } catch (error) {
     throw error;
   }
 }
-async function getUser() {
+async function getUser(params) {
+  console.log(params, "from get user");
   try {
     const { rows } = await client.query(
       `SELECT id, username, password 
-          FROM users,
-          RETURNING *;
-        `
+          FROM users
+          WHERE username = $1
+        `,
+      [params.username]
     );
-    return rows;
+    const user = rows[0];
+    if (user.password == params.password) {
+      delete user.password;
+      return user;
+    }
+    return false;
   } catch (error) {
     throw error;
   }

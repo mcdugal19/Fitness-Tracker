@@ -37,8 +37,9 @@ async function attachActivitiesToRoutines(routines) {
 async function getActivityById(id) {
   try {
     const { rows } = await client.query(
-      `SELECT id, name, description,
-        FROM activities WHERE id=${id};
+      `SELECT id, name, description
+        FROM activities 
+        WHERE id=${id};
         `
     );
     return rows;
@@ -50,8 +51,8 @@ async function getActivityById(id) {
 async function getAllActivities() {
   try {
     const { rows } = await client.query(
-      `SELECT id, name, description,
-          FROM activities;
+      `SELECT id, name, description
+        FROM activities
         `
     );
     return rows;
@@ -82,10 +83,11 @@ async function createActivity({ name, description }) {
 
 async function updateActivity(id, fields = {}) {
   // build the set string
+  console.log(fields, 'fromUpdateAct')
   const setString = Object.keys(fields)
     .map((key, index) => `"${key}"=$${index + 1}`)
     .join(", ");
-
+    console.log(setString, "fromUpdateAct")
   // return early if this is called without fields
   if (setString.length === 0) {
     return;

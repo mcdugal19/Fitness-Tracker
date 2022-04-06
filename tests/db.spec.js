@@ -97,7 +97,7 @@ describe("Database", () => {
   });
   describe("Activities", () => {
     describe("getAllActivities", () => {
-      xit("selects and returns an array of all activities", async () => {
+      it("selects and returns an array of all activities", async () => {
         const activities = await getAllActivities();
         const { rows: activitiesFromDatabase } = await client.query(`
         SELECT * FROM activities;
@@ -106,7 +106,7 @@ describe("Database", () => {
       });
     });
     describe("createActivity({ name, description })", () => {
-      xit("Creates and returns the new activity", async () => {
+      it("Creates and returns the new activity", async () => {
         const activityToCreate = {
           name: "elliptical",
           description: "using the elliptical machine",
@@ -117,7 +117,7 @@ describe("Database", () => {
       });
     });
     describe("updateActivity", () => {
-      xit("Updates name and description of an activity without affecting the ID. Returns the updated Activity.", async () => {
+      it("Updates name and description of an activity without affecting the ID. Returns the updated Activity.", async () => {
         const [activityToUpdate] = await getAllActivities();
         activityToUpdate.name = "standing barbell curl";
         const activity = await updateActivity(activityToUpdate);

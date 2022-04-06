@@ -13,7 +13,7 @@ async function createUser({ username, password }) {
         `,
       [username, password]
     );
-    console.log("user that got created", user);
+   
     return user;
   } catch (error) {
     throw error;
@@ -40,7 +40,6 @@ async function getUser(params) {
 }
 
 async function getUserById(userId) {
-    console.log(userId, "from GetUser: userId")
   try {
     const {
       rows: [user],
@@ -55,8 +54,8 @@ async function getUserById(userId) {
     if (!user) {
       return null;
     }
+
     delete user.password;
-    console.log(user, 'from getuser') 
 
     return user;
   } catch (error) {

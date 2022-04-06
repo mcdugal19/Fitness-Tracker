@@ -9,7 +9,7 @@ async function createUser({ username, password }) {
           INSERT INTO users(username, password) 
           VALUES($1, $2) 
           ON CONFLICT (username) DO NOTHING 
-          RETURNING username;
+          RETURNING username, id ;
         `,
       [username, password]
     );
@@ -20,7 +20,6 @@ async function createUser({ username, password }) {
   }
 }
 async function getUser(params) {
-  console.log(params, "from get user");
   try {
     const { rows } = await client.query(
       `SELECT id, username, password 
@@ -41,20 +40,23 @@ async function getUser(params) {
 }
 
 async function getUserById(userId) {
+    console.log(userId, "from GetUser: userId")
   try {
     const {
       rows: [user],
     } = await client.query(
-      `SELECT id, username 
-          FROM users WHERE id=${userId};
-        `
+      ` SELECT * 
+        FROM users
+        WHERE id = $1;
+        `,
+        [userId]
     );
-
+    
     if (!user) {
       return null;
     }
-
-    user.posts = await getPostsByUser(userId);
+    delete user.password;
+    console.log(user, 'from getuser') 
 
     return user;
   } catch (error) {

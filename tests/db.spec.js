@@ -83,12 +83,12 @@ describe("Database", () => {
         expect(verifiedUser.username).toBe(userCredentials.username);
         expect(unVerifiedUser).toBeFalsy();
       });
-      xit("Does NOT return the password", async () => {
+      it("Does NOT return the password", async () => {
         expect(verifiedUser.password).toBeFalsy();
       });
     });
     describe("getUserById", () => {
-      xit("Gets a user based on the user Id", async () => {
+      it("Gets a user based on the user Id", async () => {
         const user = await getUserById(userToCreateAndUpdate.id);
         expect(user).toBeTruthy();
         expect(user.id).toBe(userToCreateAndUpdate.id);

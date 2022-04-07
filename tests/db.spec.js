@@ -138,7 +138,7 @@ describe("Database", () => {
       beforeAll(async () => {
         [routine] = await getAllRoutines();
       });
-      xit("selects and returns an array of all routines, includes their activities", async () => {
+      it("selects and returns an array of all routines, includes their activities", async () => {
         expect(routine).toEqual(
           expect.objectContaining({
             id: expect.any(Number),

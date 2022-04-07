@@ -25,11 +25,14 @@ async function getRoutineById(id) {
   try {
     const {
       rows: [routine],
-    } = await client.query(`
+    } = await client.query(
+      `
         SELECT id, "creatorId", name, goal, "isPublic"
         FROM routines
         WHERE id=${id}
-      `);
+      `,
+      [id]
+    );
 
     if (!routine) {
       return null;
@@ -66,15 +69,13 @@ async function getAllRoutines() {
     // );
 
     const {
-      rows: [routine],
-    } = await client.query(
-      `
-        SELECT *
-        FROM activities
-        FULL JOIN routines;
-      `
-    );
-    console.log(routine, "test line:80");
+      rows: [routines]
+    } = await client.query(`
+      SELECT *
+      FROM routines
+    `);
+
+    console.log(routines, "test line:80");
     return routine;
   } catch (error) {
     throw error;
@@ -98,7 +99,66 @@ async function getAllPublicRoutines() {
   }
 }
 
+async function getAllRoutinesByUser({ username }) {
+  try {
+    const {
+      rows: [username],
+    } = await client.query(
+      `
+      SELECT *
+      FROM routines
+      WHERE "creatorId" = ${username}
+      RETURNING *;
+    `,
+      [username]
+    );
 
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function getPublicRoutinesByUser({ username }) {
+  try {
+    const {
+      rows: [username],
+    } = await client.query(
+      `
+      SELECT *
+      FROM routines
+      WHERE "creatorId" = ${username} AND "isPublic" = true
+      Returning *;
+    `,
+      [username]
+    );
+
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function getPublicRoutinesByActivity({ id }) {
+  try {
+    const {
+      rows: [username],
+    } = await client.query(
+      `
+      SELECT activities.*,routine_activities.duration, routine_activities.count,  routine_activities.id AS "routineActivityId", routine_activities."routineId"
+      FROM activities
+      JOIN routine_activities ON routine_activities."activityId" = activities.id
+      WHERE routine_activities."activityId" = (${id})
+      RETURNING *; 
+    `,
+      [id]
+    );
+
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+}
 
 module.exports = {
   getRoutinesWithoutActivities,
@@ -106,4 +166,7 @@ module.exports = {
   getAllRoutines,
   createRoutine,
   getAllPublicRoutines,
+  getAllRoutinesByUser,
+  getPublicRoutinesByUser,
+  getPublicRoutinesByActivity,
 };

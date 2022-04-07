@@ -2,6 +2,7 @@ const client = require("./client");
 
 async function attachActivitiesToRoutines(routines) {
   // no side effects
+  console.log(routines, "test line:5")
   const routinesToReturn = [...routines];
   const binds = routines.map((_, index) => `$${index + 1}`).join(", ");
   const routineIds = routines.map((routine) => routine.id);
@@ -16,7 +17,7 @@ async function attachActivitiesToRoutines(routines) {
       JOIN routine_activities ON routine_activities."activityId" = activities.id
       WHERE routine_activities."routineId" IN (${binds});
     `,
-      routineIds
+      [routineIds]
     );
 
     // loop over the routines

@@ -3,8 +3,9 @@
 // const { } = require('./');
 const client = require("./client");
 const { createUser } = require("./users");
-const { createActivity } = require("./activities");
-const { createRoutine } = require("./routines");
+const { createActivity, getAllActivities,  } = require("./activities");
+const { createRoutine, getRoutinesWithoutActivities } = require("./routines");
+const { addActivitiesToRoutines } = require("./routines_activities")
 
 async function dropTables() {
   console.log("Dropping All Tables...");
@@ -140,11 +141,11 @@ async function createInitialRoutines() {
         goal: "Running, stairs. Stuff that gets your heart pumping!",
       },
     ];
-    console.log(routinesToCreate, 'test1:143')
+
     const routines = await Promise.all(
       routinesToCreate.map((routine) => createRoutine(routine))
     );
-    console.log(routines, 'test2:147')
+  
     console.log("Routines Created: ", routines);
     console.log("Finished creating routines.");
   } catch (error) {
@@ -217,7 +218,7 @@ async function createInitialRoutineActivities() {
       },
     ];
     const routineActivities = await Promise.all(
-      routineActivitiesToCreate.map(addActivityToRoutine)
+      routineActivitiesToCreate.map(addActivitiesToRoutines)
     );
     console.log("routine_activities created: ", routineActivities);
     console.log("Finished creating routine_activities!");
@@ -234,7 +235,7 @@ async function rebuildDB() {
     await createInitialUsers();
     await createInitialActivities();
     await createInitialRoutines();
-    // await createInitialRoutineActivities();
+    await createInitialRoutineActivities();
   } catch (error) {
     console.log("Error during rebuildDB");
     throw error;

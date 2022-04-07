@@ -1,11 +1,7 @@
+// const { getAllPublicRoutines } = require(".");
 const client = require("./client");
 
-async function createRoutine(
-  { creatorId, 
-    isPublic,
-     name, 
-     goal }) 
-{
+async function createRoutine({ creatorId, isPublic, name, goal }) {
   try {
     const {
       rows: [routine],
@@ -18,7 +14,7 @@ async function createRoutine(
         `,
       [creatorId, isPublic, name.toLowerCase(), goal.toLowerCase()]
     );
-    console.log(routine, 'testroutine line:17')
+
     return routine;
   } catch (error) {
     throw error;
@@ -66,28 +62,48 @@ async function getAllRoutines() {
     //   `
     //     SELECT *
     //     FROM routines
-    //   `,
-    //   [routine]
+    //   `
     // );
 
-    const { rows } = await client.query(
+    const {
+      rows: [routine],
+    } = await client.query(
       `
         SELECT *
-        FROM routines,
-        LEFT JOIN activities
-        ON routines.* = activities.*;
+        FROM activities
+        FULL JOIN routines;
       `
     );
+    console.log(routine, "test line:80");
+    return routine;
+  } catch (error) {
+    throw error;
+  }
+}
 
+async function getAllPublicRoutines() {
+  try {
+    const {
+      rows: [publicRoutines],
+    } = await client.query(`
+        SELECT *
+        FROM routines
+        WHERE "isPublic" = true
+        RETURNING *;
+      `);
+    console.log(publicRoutines, "test line:80");
     return rows;
   } catch (error) {
     throw error;
   }
 }
 
+
+
 module.exports = {
   getRoutinesWithoutActivities,
   getRoutineById,
   getAllRoutines,
   createRoutine,
+  getAllPublicRoutines,
 };

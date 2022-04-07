@@ -128,7 +128,7 @@ describe("Database", () => {
   describe("Routines", () => {
     let routineToCreateAndUpdate;
     describe("getActivityById", () => {
-      xit("gets activities by their id", async () => {
+      it("gets activities by their id", async () => {
         const activity = await getActivityById(1);
         expect(activity).toBeTruthy();
       });

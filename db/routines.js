@@ -1,5 +1,30 @@
 const client = require("./client");
 
+async function createRoutine(
+  { creatorId, 
+    isPublic,
+     name, 
+     goal }) 
+{
+  try {
+    const {
+      rows: [routine],
+    } = await client.query(
+      `
+          INSERT INTO routines ("creatorId", "isPublic", name, goal) 
+          VALUES($1, $2, $3, $4) 
+          ON CONFLICT (name) DO NOTHING 
+          RETURNING *;
+        `,
+      [creatorId, isPublic, name.toLowerCase(), goal.toLowerCase()]
+    );
+    console.log(routine, 'testroutine line:17')
+    return routine;
+  } catch (error) {
+    throw error;
+  }
+}
+
 async function getRoutineById(id) {
   try {
     const {
@@ -35,25 +60,22 @@ async function getRoutinesWithoutActivities() {
 
 async function getAllRoutines() {
   try {
-    const {
-      rows: [routine],
-    } = await client.query(
-      `
-        SELECT *
-        FROM routines
-      `,
-      [routine]
-    );
+    // const {
+    //   rows: [routine],
+    // } = await client.query(
+    //   `
+    //     SELECT *
+    //     FROM routines
+    //   `,
+    //   [routine]
+    // );
 
     const { rows } = await client.query(
       `
-        SELECT activities.*,
-        FROM activities
-        LEFT JOIN routine_activities ON activities.id=routine_activities."activitiesId"
-        SELECT routines.*, 
-        FROM routines
-        LEFT JOIN routine_activities ON routine.
-        id=routine_activities."routineId"
+        SELECT *
+        FROM routines,
+        LEFT JOIN activities
+        ON routines.* = activities.*;
       `
     );
 
@@ -62,3 +84,10 @@ async function getAllRoutines() {
     throw error;
   }
 }
+
+module.exports = {
+  getRoutinesWithoutActivities,
+  getRoutineById,
+  getAllRoutines,
+  createRoutine,
+};

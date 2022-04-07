@@ -82,10 +82,7 @@ async function createActivity({ name, description }) {
 }
 
 async function updateActivity({ id, name, description }) {
-  // build the set string
-  // console.log( "fromUpdateAct");
 
-  // console.log(params, "from updateActivities");
   try {
     const {
       rows: [activity],
@@ -99,7 +96,6 @@ async function updateActivity({ id, name, description }) {
       `,
       [name, description, id]
     );
-    console.log(activity, "from act");
     return activity;
   } catch (error) {
     throw error;

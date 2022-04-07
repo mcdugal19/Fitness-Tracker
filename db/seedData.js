@@ -140,9 +140,11 @@ async function createInitialRoutines() {
         goal: "Running, stairs. Stuff that gets your heart pumping!",
       },
     ];
+    console.log(routinesToCreate, 'test1:143')
     const routines = await Promise.all(
       routinesToCreate.map((routine) => createRoutine(routine))
     );
+    console.log(routines, 'test2:147')
     console.log("Routines Created: ", routines);
     console.log("Finished creating routines.");
   } catch (error) {
@@ -231,7 +233,7 @@ async function rebuildDB() {
     await createTables();
     await createInitialUsers();
     await createInitialActivities();
-    // await createInitialRoutines();
+    await createInitialRoutines();
     // await createInitialRoutineActivities();
   } catch (error) {
     console.log("Error during rebuildDB");

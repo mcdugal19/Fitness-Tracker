@@ -81,31 +81,25 @@ async function createActivity({ name, description }) {
   }
 }
 
-async function updateActivity(id, fields = {}) {
+async function updateActivity({ id, name, description }) {
   // build the set string
-  console.log(fields, 'fromUpdateAct')
-  const setString = Object.keys(fields)
-    .map((key, index) => `"${key}"=$${index + 1}`)
-    .join(", ");
-    console.log(setString, "fromUpdateAct")
-  // return early if this is called without fields
-  if (setString.length === 0) {
-    return;
-  }
+  // console.log( "fromUpdateAct");
 
+  // console.log(params, "from updateActivities");
   try {
     const {
       rows: [activity],
     } = await client.query(
       `
         UPDATE activities
-        SET ${setString}
-        WHERE id=${id}
+        SET name = ($1),
+        description = ($2)
+        WHERE id = ($3)
         RETURNING *;
       `,
-      Object.values(fields)
+      [name, description, id]
     );
-
+    console.log(activity, "from act");
     return activity;
   } catch (error) {
     throw error;

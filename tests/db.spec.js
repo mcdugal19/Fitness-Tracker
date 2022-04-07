@@ -97,7 +97,7 @@ describe("Database", () => {
   });
   describe("Activities", () => {
     describe("getAllActivities", () => {
-      xit("selects and returns an array of all activities", async () => {
+      it("selects and returns an array of all activities", async () => {
         const activities = await getAllActivities();
         const { rows: activitiesFromDatabase } = await client.query(`
         SELECT * FROM activities;

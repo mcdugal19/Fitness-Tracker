@@ -289,7 +289,7 @@ describe("Database", () => {
         activity = await getActivityById(3);
         [routine] = await getPublicRoutinesByActivity(activity);
       });
-      xit("selects and return an array of public routines which have a specific activityId in their routine_activities join, includes their activities", async () => {
+      it("selects and return an array of public routines which have a specific activityId in their routine_activities join, includes their activities", async () => {
         expect(routine).toEqual(
           expect.objectContaining({
             id: expect.any(Number),

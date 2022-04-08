@@ -1,7 +1,8 @@
 // const { getAllPublicRoutines } = require(".");
 const client = require("./client");
 const { attachActivitiesToRoutines } = require("./activities");
-const { getUserByUsername } = require("./users");
+const { getUserByUsername, getUserById } = require("./users");
+
 
 async function createRoutine({ creatorId, isPublic, name, goal }) {
   try {
@@ -128,22 +129,22 @@ async function getPublicRoutinesByUser({ username }) {
   }
 }
 
-async function getPublicRoutinesByActivity({ id }) {
+async function getPublicRoutinesByActivity( activity ) {
+  console.log(activity, 'test activity line:133')
   try {
-    const {
-      rows: [username],
-    } = await client.query(
-      `
-      SELECT activities.*,routine_activities.duration, routine_activities.count,  routine_activities.id AS "routineActivityId", routine_activities."routineId"
-      FROM activities
-      JOIN routine_activities ON routine_activities."activityId" = activities.id
-      WHERE routine_activities."activityId" = (${id})
-      RETURNING *; 
-    `,
-      [id]
-    );
-
-    return rows;
+      const {
+        rows: routines
+      } = await client.query(
+        `
+        SELECT routines.*, users.username AS "creatorName"
+        FROM routines
+        JOIN users ON routines."creatorId"=users.id
+        WHERE "isPublic"=true AND "activityId" = $1
+      `,
+        [activity.id]
+      );
+  
+      return attachActivitiesToRoutines(routines);    
   } catch (error) {
     throw error;
   }

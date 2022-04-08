@@ -13,7 +13,7 @@ async function createUser({ username, password }) {
         `,
       [username, password]
     );
-   
+
     return user;
   } catch (error) {
     throw error;
@@ -48,9 +48,9 @@ async function getUserById(userId) {
         FROM users
         WHERE id = $1;
         `,
-        [userId]
+      [userId]
     );
-    
+
     if (!user) {
       return null;
     }
@@ -75,6 +75,12 @@ async function getUserByUsername(username) {
       `,
       [username]
     );
+
+    if (!user) {
+      return null;
+    }
+    
+    delete user.password;
 
     return user;
   } catch (error) {

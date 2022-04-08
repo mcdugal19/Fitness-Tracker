@@ -2,7 +2,7 @@ const client = require("./client");
 
 async function attachActivitiesToRoutines(routines) {
   // no side effects
-  console.log(routines, 'test routines line:5')
+  // console.log(routines, 'test routines line:5')
   const routinesToReturn = [...routines];
   const binds = routines.map((_, index) => `$${index + 1}`).join(", ");
   const routineIds = routines.map((routine) => routine.id);

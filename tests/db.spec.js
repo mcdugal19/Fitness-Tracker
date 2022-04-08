@@ -250,7 +250,7 @@ describe("Database", () => {
         user = await getUserById(1);
         [routine] = await getPublicRoutinesByUser(user);
       });
-      xit("selects and returns an array of all routines made by user, includes their activities", async () => {
+      it("selects and returns an array of all routines made by user, includes their activities", async () => {
         expect(routine).toEqual(
           expect.objectContaining({
             id: expect.any(Number),
@@ -264,14 +264,14 @@ describe("Database", () => {
         expect(routine.creatorId).toBe(user.id);
         expect(routine.isPublic).toBe(true);
       });
-      xit("includes username, from users join, aliased as creatorName", async () => {
+      it("includes username, from users join, aliased as creatorName", async () => {
         expect(routine).toEqual(
           expect.objectContaining({
             creatorName: expect.any(String),
           })
         );
       });
-      xit("includes duration and count on activities, from routine_activities join", async () => {
+      it("includes duration and count on activities, from routine_activities join", async () => {
         const {
           activities: [firstActivity],
         } = routine;

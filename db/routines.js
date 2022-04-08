@@ -1,6 +1,7 @@
 // const { getAllPublicRoutines } = require(".");
 const client = require("./client");
-const { attachActivitiesToRoutines } = require("./activities")
+const { attachActivitiesToRoutines } = require("./activities");
+const { getUserByUsername } = require("./users");
 
 async function createRoutine({ creatorId, isPublic, name, goal }) {
   try {
@@ -30,7 +31,7 @@ async function getRoutineById(id) {
       `
         SELECT id, "creatorId", name, goal, "isPublic"
         FROM routines
-        WHERE id=${id}
+        WHERE id=$1
       `,
       [id]
     );
@@ -65,9 +66,7 @@ async function getAllRoutines() {
       FROM routines
       JOIN users ON routines."creatorId"=users.id;
     `);
-  console.log(rows, "test line:68")
-  console.log(attachActivitiesToRoutines(rows), "test line:70");
-  return attachActivitiesToRoutines(rows);
+    return attachActivitiesToRoutines(rows);
   } catch (error) {
     throw error;
   }
@@ -75,36 +74,36 @@ async function getAllRoutines() {
 
 async function getAllPublicRoutines() {
   try {
-    const {
-      rows: [publicRoutines],
-    } = await client.query(`
-        SELECT *
+    const { rows } = await client.query(`
+        SELECT routines.*, users.username AS "creatorName"
         FROM routines
-        WHERE "isPublic" = true
-        RETURNING *;
+        JOIN users ON routines."creatorId"=users.id
+        WHERE "isPublic" = true;
       `);
-    console.log(publicRoutines, "test line:80");
-    return rows;
+    return attachActivitiesToRoutines(rows);
   } catch (error) {
     throw error;
   }
 }
 
 async function getAllRoutinesByUser({ username }) {
+  // console.log(user, 'test user line:91')
   try {
-    const {
-      rows: [username],
-    } = await client.query(
-      `
-      SELECT *
-      FROM routines
-      WHERE "creatorId" = ${username}
-      RETURNING *;
-    `,
-      [username]
-    );
+    const user = await getUserByUsername(username);
+    if (user) {
+      const { rows: routines } = await client.query(
+        `
+        SELECT routines.*, users.username AS "creatorName"
+        FROM routines
+        JOIN users ON routines."creatorId"=users.id
+        WHERE "creatorId" = $1
+      `,
+      [user.id]
+      );
 
-    return rows;
+      console.log(routines, "test rows line:105");
+      return attachActivitiesToRoutines(routines);
+    }
   } catch (error) {
     throw error;
   }

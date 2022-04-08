@@ -5,6 +5,7 @@ async function attachActivitiesToRoutines(routines) {
   console.log(routines, "test line:5")
   const routinesToReturn = [...routines];
   const binds = routines.map((_, index) => `$${index + 1}`).join(", ");
+  console.log(binds, "test line:8")
   const routineIds = routines.map((routine) => routine.id);
   if (!routineIds?.length) return [];
 
@@ -17,7 +18,7 @@ async function attachActivitiesToRoutines(routines) {
       JOIN routine_activities ON routine_activities."activityId" = activities.id
       WHERE routine_activities."routineId" IN (${binds});
     `,
-      [routineIds]
+      routineIds
     );
 
     // loop over the routines
@@ -108,4 +109,5 @@ module.exports = {
   getAllActivities,
   createActivity,
   updateActivity,
+  attachActivitiesToRoutines,
 };

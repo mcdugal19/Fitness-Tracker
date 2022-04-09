@@ -322,7 +322,7 @@ describe("Database", () => {
       });
     });
     describe("createRoutine", () => {
-      xit("creates and returns the new routine", async () => {
+      it("creates and returns the new routine", async () => {
         routineToCreateAndUpdate = await createRoutine({
           creatorId: 2,
           isPublic: true,
@@ -346,7 +346,7 @@ describe("Database", () => {
         });
         queriedRoutine = await getRoutineById(routineToCreateAndUpdate.id);
       });
-      xit("Returns the updated routine", async () => {
+      it("Returns the updated routine", async () => {
         expect(routineToCreateAndUpdate).toBeTruthy();
       });
       xit("Finds the routine with id equal to the passed in id. Does not update the routine id.", async () => {

@@ -131,19 +131,17 @@ async function getPublicRoutinesByUser({ username }) {
 async function getPublicRoutinesByActivity(activity) {
   const [id] = activity;
   try {
-    const { rows } = await client.query(
+    const { rows : routines } = await client.query(
       `
-      SELECT routine_activities.*, routines.*, routines.name AS "routineName", activities
-      .name AS "activityName" 
-      FROM routines, routine_activities
+      SELECT routines.*, routines.name AS "routineName", activities.name AS "activityName", users.username AS "creatorName", routine_activities.* 
+      FROM routines, users, routine_activities
       JOIN activities ON routine_activities."activityId"=activities.id
-        WHERE "isPublic"=true AND "activityId"=$1
+      WHERE "isPublic"=true AND "activityId"=$1
       `,
       [id.id]
     );
-    
-    console.log(rows, 'test: line144')
-    return rows;
+
+    return attachActivitiesToRoutines(routines);
   } catch (error) {
     throw error;
   }

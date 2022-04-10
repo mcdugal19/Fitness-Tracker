@@ -36,7 +36,6 @@ async function updateRoutine({ id, isPublic, name, goal}) {
         `,
         [id, isPublic, name, goal]
     );
-        console.log(routine, 'routine line 40')
     return routine;
 
   } 
@@ -169,6 +168,37 @@ async function getPublicRoutinesByActivity(activity) {
   }
 }
 
+async function destroyRoutine(id) {
+  try {
+    const {
+      rows: [routine],
+    } = await client.query(
+      `
+          DELETE
+          FROM routines
+          WHERE id=$1
+          RETURNING *;
+        `,
+      [id]
+    );
+    const {
+      rows: [routines],
+    } = await client.query(
+      `
+          DELETE
+          FROM routine_activities
+          WHERE "routineId"=$1
+          RETURNING *;
+        `,
+      [id]
+    );
+
+    return routines;
+  } catch (error) {
+    throw error
+  }
+}
+
 module.exports = {
   updateRoutine,
   getRoutinesWithoutActivities,
@@ -179,4 +209,5 @@ module.exports = {
   getAllRoutinesByUser,
   getPublicRoutinesByUser,
   getPublicRoutinesByActivity,
+  destroyRoutine,
 };

@@ -370,7 +370,7 @@ describe("Database", () => {
       });
     });
     describe("destroyRoutine", () => {
-      xit("removes routine from database", async () => {
+      it("removes routine from database", async () => {
         await destroyRoutine(routineToCreateAndUpdate.id);
         const {
           rows: [routine],

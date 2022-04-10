@@ -24,24 +24,26 @@ async function createRoutine({ creatorId, isPublic, name, goal }) {
 }
 
 async function updateRoutine({ id, isPublic, name, goal}) {
-  try {
-    const routineToBeUpdated = await getRoutineById(id)
+    try {
     const {
       rows: [routine],
     } = await client.query(
-      `
+      `  
           UPDATE routines
-          SET "isPublic"= (${isPublic}), name= ('${name}'), goal= ('${goal}')
-          WHERE id=(${id})
+          SET name=COALESCE($3, name), goal=COALESCE($4, goal), "isPublic"=COALESCE($2, "isPublic")
+          WHERE id=$1
           RETURNING *;
-        `
+        `,
+        [id, isPublic, name, goal]
     );
         console.log(routine, 'routine line 40')
     return routine;
-  } catch (error) {
+
+  } 
+  catch (error) {
     throw error;
   }
-}
+} 
 
 async function getRoutineById(id) {
   try {

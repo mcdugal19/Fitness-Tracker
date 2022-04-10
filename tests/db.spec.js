@@ -357,7 +357,7 @@ describe("Database", () => {
         expect(routineToCreateAndUpdate.name).toBe(queriedRoutine.name);
         expect(routineToCreateAndUpdate.goal).toBe(queriedRoutine.goal);
       });
-      xit("Does not update fields that are not passed in", async () => {
+      it("Does not update fields that are not passed in", async () => {
         const name = "Abs Day";
         routineToCreateAndUpdate = await updateRoutine({
           id: routineToCreateAndUpdate.id,

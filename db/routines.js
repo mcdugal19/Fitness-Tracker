@@ -24,7 +24,6 @@ async function createRoutine({ creatorId, isPublic, name, goal }) {
 }
 
 async function updateRoutine({ id, isPublic, name, goal}) {
-  console.log(id, 'testid line 27')
   try {
     const routineToBeUpdated = await getRoutineById(id)
     const {
@@ -32,11 +31,10 @@ async function updateRoutine({ id, isPublic, name, goal}) {
     } = await client.query(
       `
           UPDATE routines
-          SET "isPublic"= (${isPublic}), name= (${name}), goal= (${goal})
+          SET "isPublic"= (${isPublic}), name= ('${name}'), goal= ('${goal}')
           WHERE id=(${id})
           RETURNING *;
-        `,
-      [id, isPublic, name.toLowerCase(), goal.toLowerCase()]
+        `
     );
         console.log(routine, 'routine line 40')
     return routine;

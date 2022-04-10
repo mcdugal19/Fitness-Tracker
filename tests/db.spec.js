@@ -349,10 +349,10 @@ describe("Database", () => {
       it("Returns the updated routine", async () => {
         expect(routineToCreateAndUpdate).toBeTruthy();
       });
-      xit("Finds the routine with id equal to the passed in id. Does not update the routine id.", async () => {
+      it("Finds the routine with id equal to the passed in id. Does not update the routine id.", async () => {
         expect(routineToCreateAndUpdate.id).toBe(queriedRoutine.id);
       });
-      xit("Updates the public status, name, or goal, as necessary", async () => {
+      it("Updates the public status, name, or goal, as necessary", async () => {
         expect(routineToCreateAndUpdate.isPublic).toBe(queriedRoutine.isPublic);
         expect(routineToCreateAndUpdate.name).toBe(queriedRoutine.name);
         expect(routineToCreateAndUpdate.goal).toBe(queriedRoutine.goal);

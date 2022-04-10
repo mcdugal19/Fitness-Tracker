@@ -384,7 +384,7 @@ describe("Database", () => {
         );
         expect(routine).toBeFalsy();
       });
-      xit("Deletes all the routine_activities whose routine is the one being deleted.", async () => {
+      it("Deletes all the routine_activities whose routine is the one being deleted.", async () => {
         const queriedRoutineActivities = await getRoutineActivitiesByRoutine(
           routineToCreateAndUpdate
         );
@@ -400,8 +400,8 @@ describe("Database", () => {
       duration: 10000,
     };
     let routineActivityToCreateAndUpdate;
-    xdescribe("addActivityToRoutine({ routineId, activityId, count, duration })", () => {
-      xit("creates a new routine_activity, and return it", async () => {
+    describe("addActivityToRoutine({ routineId, activityId, count, duration })", () => {
+      it("creates a new routine_activity, and return it", async () => {
         routineActivityToCreateAndUpdate = await addActivityToRoutine(
           routineActivityData
         );
@@ -421,7 +421,7 @@ describe("Database", () => {
       });
     });
     describe("updateRoutineActivity({ id, count, duration })", () => {
-      xit("Finds the routine with id equal to the passed in id. Updates the count or duration as necessary.", async () => {
+      it("Finds the routine with id equal to the passed in id. Updates the count or duration as necessary.", async () => {
         const newRoutineActivityData = {
           id: routineActivityToCreateAndUpdate.id,
           count: 15,
@@ -442,7 +442,7 @@ describe("Database", () => {
       });
     });
     describe("destroyRoutineActivity(id)", () => {
-      xit("remove routine_activity from database", async () => {
+      it("remove routine_activity from database", async () => {
         const deletedRoutine = await destroyRoutineActivity(
           routineActivityToCreateAndUpdate.id
         );

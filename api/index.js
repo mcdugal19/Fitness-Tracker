@@ -1,21 +1,23 @@
 // create an api router
 // attach other routers from files in this api directory (users, activities...)
 // export the api router
+
+
+
+const { getUserById } = require("../db/users");
+const { JWT_SECRET } = process.env;
 const express = require("express");
 const appRouter = express.Router();
-const usersRouter = require('./users');
 const jwt = require("jsonwebtoken");
-const { getUserById } = require("../db/users");
-const { app } = require("faker/lib/locales/en");
-const { JWT_SECRET } = process.env;
-
-
 
 appRouter.get('/health', (req, res, next)=> {
     res.send({ message: 'Server is healthy...'});
 });
 
+const usersRouter = require('./users');
 appRouter.use('/users', usersRouter);
+
+
 
 
 // appRouter.use(async (req, res, next) => {

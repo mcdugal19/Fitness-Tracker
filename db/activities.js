@@ -1,4 +1,4 @@
-const client = require("../client");
+const client = require("./client");
 
 async function attachActivitiesToRoutines(routines) {
   // no side effects
@@ -73,7 +73,7 @@ async function createActivity({ name, description }) {
           ON CONFLICT (name) DO NOTHING 
           RETURNING *;
         `,
-      [name.toLowerCase(), description.toLowerCase()]
+      [name, description]
     );
 
     return activity;
@@ -83,20 +83,22 @@ async function createActivity({ name, description }) {
 }
 
 async function updateActivity({ id, name, description }) {
-
+  console.log('name: ', name)
+  console.log('desc: ', description)
   try {
     const {
       rows: [activity],
     } = await client.query(
       `
         UPDATE activities
-        SET name = ($1),
-        description = ($2)
-        WHERE id = ($3)
+        SET name = $1,
+        description = $2
+        WHERE id = $3
         RETURNING *;
       `,
       [name, description, id]
     );
+    console.log('update_Activity: ', activity)
     return activity;
   } catch (error) {
     throw error;

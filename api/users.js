@@ -1,91 +1,54 @@
 const { requireUser } = require("./utils");
 const express = require("express");
-const apiRouter = express.Router();
 const usersRouter = express.Router();
 const jwt = require("jsonwebtoken");
-const { createUser, getUserByUsername, getUserById } = require("../db");
+const {
+  createUser,
+  getUserByUsername,
+  getUserById,
+  getPublicRoutinesByUser,
+} = require("../db");
 const { JWT_SECRET } = process.env;
+
 usersRouter.use((req, res, next) => {
   console.log("Request from users");
   next();
 });
 
-usersRouter.get("/me", async (req, res, next) => {
-  const userId = req.user.id;
-  const user = await getUserById(userId);
-  next({ user });
-});
-
-// usersRouter.post("/register", async (req, res, next) => {
-//   const { username, password } = req.body;
-//   const existingUser = await getUserByUsername({ username });
-//   try {
-//     if (password.length < 8) {
-//       res.status(401);
-//       next({
-//         name: "Password Error",
-//         message: "Password must be longer than 8 characters",
-//       });
-//     } else if (existingUser) {
-//       res.status(401);
-//       next({
-//         name: "User Exists Error",
-//         message: "This User already exists",
-//       });
-//     } else {
-//       const newUser = await createUser({ username, password });
-//       res.send({ user });
-//     }
-//   } catch ({ name, message }) {
-//     next({ name, message });
-//   }
-// });
-
 usersRouter.post("/register", async (req, res, next) => {
   const { username, password } = req.body;
 
   try {
-    if (password.length < 8) {
-      res.status(401);
-      next({
-        name: "Password Error",
-        message: "Password must be longer than 8 characters",
-      });
-    }
-    const _user = await getUserByUsername(username);
-
-    if (_user) {
-      throw new Error("duplicate");
-      res.status(401);
-      next({
-        name: "UserExistsError",
-        message: "A user by that username already exists",
-      });
-    }
-
-    const user = await createUser({
-      username,
-      password,
-    });
-
-    const token = jwt.sign(
-      {
-        id: user.id,
-        username,
-      },
-      process.env.JWT_SECRET,
-      {
-        expiresIn: "1w",
+    if (password.length >= 8) {
+      const _user = await getUserByUsername(username);
+      console.log('_user: ', _user)
+      if (!_user) {
+        const user = await createUser({ username, password });
+            console.log('user: create: ', user)
+        const token = jwt.sign(
+          {
+            id: user.id,
+            username,
+          },
+          process.env.JWT_SECRET,
+          {
+            expiresIn: "1w",
+          }
+        );
+        console.log('token from Users: ', token)
+        res.send({
+          message: "thank you for signing up",
+          token,
+          user,
+        });
+      } else {
+          next({name: "Username Taken", message: "Username already exists"})
       }
-    );
-
-    res.send({
-      message: "thank you for signing up",
-      token,
-      user,
-    });
-  } catch ({ name, message }) {
-    next({ name, message });
+    } else {
+        next({name: "Password too short", message: "Password must be 8 characters or longer"})
+    }
+  } catch ( error ) {
+    next( error );
   }
 });
 
@@ -119,6 +82,25 @@ usersRouter.post("/login", async (req, res, next) => {
     }
   } catch (error) {
     console.log(error);
+    next(error);
+  }
+});
+
+usersRouter.get("/me", requireUser, async (req, res, next) => {
+    try {
+        const user = await getUserById(req.user.id);
+        res.send(user);
+    } catch (error) {
+        next(error);
+    }
+});
+
+usersRouter.get("/:username/routines", async (req, res, next) => {
+    const { username } = req.params
+  try {
+    const userRoutines = await getPublicRoutinesByUser({ username });
+    res.send( userRoutines );
+  } catch (error) {
     next(error);
   }
 });

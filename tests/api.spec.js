@@ -22,7 +22,7 @@ const {
   createRoutine,
   getRoutineActivityById,
 } = require("../db");
-const client = require("../client");
+const client = require("../db/client");
 
 describe("API", () => {
   let token, registeredUser;
@@ -143,7 +143,7 @@ describe("API", () => {
       });
     });
     describe("GET /users/:username/routines", () => {
-      xit("Gets a list of public routines for a particular user.", async () => {
+      it("Gets a list of public routines for a particular user.", async () => {
         const userId = 2;
         const userWithRoutines = await getUserById(userId);
         const { data: routines } = await axios.get(
@@ -161,7 +161,7 @@ describe("API", () => {
       description: "They hurt, but you will thank you later",
     };
     describe("GET /activities", () => {
-      xit("Just returns a list of all activities in the database", async () => {
+      it("Just returns a list of all activities in the database", async () => {
         const curls = { name: "curls", description: "4 sets of 15." };
         const createdActivity = await createActivity(curls);
         const { data: activities } = await axios.get(
@@ -179,7 +179,7 @@ describe("API", () => {
       });
     });
     describe("POST /activities (*)", () => {
-      xit("Creates a new activity", async () => {
+      it("Creates a new activity", async () => {
         const { data: respondedActivity } = await axios.post(
           `${API_URL}/api/activities`,
           activityToCreateAndUpdate,
@@ -193,7 +193,7 @@ describe("API", () => {
       });
     });
     describe("PATCH /activities/:activityId (*)", () => {
-      xit("Anyone can update an activity (yes, this could lead to long term problems a la wikipedia)", async () => {
+      it("Anyone can update an activity (yes, this could lead to long term problems a la wikipedia)", async () => {
         const newActivityData = {
           name: "Double Bicep Curls",
           description: "They hurt EVEN MORE, but you will thank you later",
@@ -210,7 +210,7 @@ describe("API", () => {
       });
     });
     describe("GET /activities/:activityId/routines", () => {
-      xit("Get a list of all public routines which feature that activity", async () => {
+      it("Get a list of all public routines which feature that activity", async () => {
         const [testRoutine] = await getAllPublicRoutines();
         const [testActivity] = testRoutine.activities;
         const { data: routines } = await axios.get(
@@ -238,7 +238,7 @@ describe("API", () => {
       goal: "Work on that Elliptical, yet again!",
     };
     describe("GET /routines", () => {
-      xit("Returns a list of public routines, includes the activities with them", async () => {
+      it("Returns a list of public routines, includes the activities with them", async () => {
         const publicRoutinesFromDB = await getAllPublicRoutines();
         const { data: publicRoutinesFromAPI } = await axios.get(
           `${API_URL}/api/routines`
@@ -248,7 +248,7 @@ describe("API", () => {
     });
 
     describe("POST /routines (*)", () => {
-      xit("Creates a new routine, with the creatorId matching the logged in user", async () => {
+      it("Creates a new routine, with the creatorId matching the logged in user", async () => {
         const { data: respondedRoutine } = await axios.post(
           `${API_URL}/api/routines`,
           routineToCreateAndUpdate,
@@ -261,7 +261,7 @@ describe("API", () => {
         expect(respondedRoutine.creatorId).toEqual(registeredUser.id);
         routineToCreateAndUpdate = respondedRoutine;
       });
-      xit("Requires logged in user", async () => {
+      it("Requires logged in user", async () => {
         let noLoggedInUserResp, noLoggedInUserErrResp;
         try {
           noLoggedInUserResp = await axios.post(
@@ -276,7 +276,7 @@ describe("API", () => {
       });
     });
     describe("PATCH /routines/:routineId (**)", () => {
-      xit("Updates a routine, notably changing public/private, the name, or the goal", async () => {
+      it("Updates a routine, notably changing public/private, the name, or the goal", async () => {
         const { data: respondedRoutine } = await axios.patch(
           `${API_URL}/api/routines/${routineToCreateAndUpdate.id}`,
           newRoutineData,

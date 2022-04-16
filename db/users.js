@@ -1,4 +1,4 @@
-const client = require("../client");
+const client = require("./client");
 
 async function createUser({ username, password }) {
   try {
@@ -76,14 +76,15 @@ async function getUserByUsername(username) {
       [username]
     );
 
-    if (!user) {
-      return null;
-    }
+    // if (!user) {
+    //   return null;
+    // }
 
     // delete user.password;
-
+      console.log('userDB: ', user)
     return user;
   } catch (error) {
+    console.error('error getting User')
     throw error;
   }
 }

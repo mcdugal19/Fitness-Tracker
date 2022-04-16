@@ -24,6 +24,7 @@ const {createUser, getUser, getUserById, getUserByUsername} =  require('./users'
 
 
 module.exports = {
+  client,
   createUser,
   getUserByUsername,
   createActivity,

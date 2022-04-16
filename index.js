@@ -16,6 +16,7 @@ app.use(cors());
 app.use(express.json());
 
 
+
 app.use((req, res, next) => {
   console.log("<____Body Logger START____>");
   console.log(req.body);
@@ -39,7 +40,7 @@ app.use("/api", appRouter);
 //     res.send({ success: false, message: error.message })
 // })
 
-const client = require('./db/client');
+const client = require('./db/index');
 client.connect();
 
 app.listen(PORT, () => {

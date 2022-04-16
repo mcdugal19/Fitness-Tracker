@@ -2,11 +2,10 @@
 
 require("dotenv").config();
 
-
 const express = require("express");
-const cors = require('cors');
+const cors = require("cors");
 const morgan = require("morgan");
-// const client = require('./')
+const client = require("./client");
 
 const app = express();
 
@@ -17,7 +16,6 @@ app.use(express.json());
 const apiRouter = require("./api");
 app.use("/api", apiRouter);
 
-
 app.use((req, res, next) => {
   console.log("<____Body Logger START____>");
   console.log(req.body);
@@ -26,11 +24,10 @@ app.use((req, res, next) => {
   next();
 });
 
-
-const client = require('./db/index');
+// const client = require("./db/index");c
 client.connect();
 const { PORT = 3000 } = process.env;
 
 app.listen(PORT, () => {
   console.log(`CORS-enabled web server listening on port`, PORT);
-})
+});

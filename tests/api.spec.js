@@ -288,7 +288,7 @@ describe("API", () => {
       });
     });
     describe("DELETE /routines/:routineId (**)", () => {
-      xit("Hard deletes a routine. Makes sure to delete all the routineActivities whose routine is the one being deleted.", async () => {
+      it("Hard deletes a routine. Makes sure to delete all the routineActivities whose routine is the one being deleted.", async () => {
         const { data: deletedRoutine } = await axios.delete(
           `${API_URL}/api/routines/${routineToCreateAndUpdate.id}`,
           { headers: { Authorization: `Bearer ${token}` } }
@@ -302,7 +302,7 @@ describe("API", () => {
     });
     describe("POST /routines/:routineId/activities", () => {
       let newRoutine;
-      xit("Attaches a single activity to a routine.", async () => {
+      it("Attaches a single activity to a routine.", async () => {
         newRoutine = await createRoutine({
           creatorId: registeredUser.id,
           name: "Pull Ups",
@@ -319,7 +319,7 @@ describe("API", () => {
         );
         routineActivityToCreateAndUpdate = respondedRoutineActivity;
       });
-      xit("Prevents duplication on (routineId, activityId) pair.", async () => {
+      it("Prevents duplication on (routineId, activityId) pair.", async () => {
         let duplicateIds, duplicateIdsResp;
         try {
           duplicateIds = await axios.post(
@@ -335,7 +335,7 @@ describe("API", () => {
       });
     });
   });
-  xdescribe("routine_activities", () => {
+  describe("routine_activities", () => {
     let newRoutineActivityData = {
       routineId: 3,
       activityId: 8,
@@ -343,7 +343,7 @@ describe("API", () => {
       duration: 200,
     };
     describe("PATCH /routine_activities/:routineActivityId (**)", () => {
-      xit("Updates the count or duration on the routine activity", async () => {
+      it("Updates the count or duration on the routine activity", async () => {
         const { data: respondedRoutineActivity } = await axios.patch(
           `${API_URL}/api/routine_activities/${routineActivityToCreateAndUpdate.id}`,
           newRoutineActivityData,
@@ -357,7 +357,7 @@ describe("API", () => {
         );
         routineActivityToCreateAndUpdate = respondedRoutineActivity;
       });
-      xit("Logged in user should be the owner of the modified object.", async () => {
+      it("Logged in user should be the owner of the modified object.", async () => {
         let respondedRoutineActivity, errRespondedRoutineActivity;
         try {
           respondedRoutineActivity = await axios.patch(
@@ -373,7 +373,7 @@ describe("API", () => {
       });
     });
     describe("DELETE /routine_activities/:routineActivityId (**)", () => {
-      xit("Removes an activity from a routine, uses hard delete", async () => {
+      it("Removes an activity from a routine, uses hard delete", async () => {
         const { data: deletedRoutineActivity } = await axios.delete(
           `${API_URL}/api/routine_activities/${routineActivityToCreateAndUpdate.id}`,
           { headers: { Authorization: `Bearer ${token}` } }
@@ -392,7 +392,7 @@ describe("API", () => {
         );
         expect(shouldBeDeleted).toBeFalsy();
       });
-      xit("Logged in user should be the owner of the modified object.", async () => {
+      it("Logged in user should be the owner of the modified object.", async () => {
         let respondedRoutineActivity, errRespondedRoutineActivity;
         try {
           respondedRoutineActivity = await axios.delete(

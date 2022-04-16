@@ -57,10 +57,6 @@ async function getRoutineById(id) {
       [id]
     );
 
-    if (!routine) {
-      return null;
-    }
-
     return routine;
   } catch (error) {
     throw error;
@@ -189,7 +185,7 @@ async function destroyRoutine(id) {
       [id]
     );
 
-    return routines;
+    return routine;
   } catch (error) {
     throw error
   }

@@ -48,7 +48,7 @@ async function updateRoutineActivity({ id, count, duration }) {
 
 async function getRoutineActivityById(id){
     try {
-        const { rows } = await client.query(
+        const { rows: [routineActivity] } = await client.query(
             `SELECT id, "routineId", "activityId", duration, count
               FROM routine_activities 
               WHERE id=$1;
@@ -56,7 +56,7 @@ async function getRoutineActivityById(id){
               [id]
           );
         
-        return rows;
+        return routineActivity;
     } catch (error) {
         throw error;
     }

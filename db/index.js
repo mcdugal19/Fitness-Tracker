@@ -1,13 +1,49 @@
 // require and re-export all files in this db directory (users, activities...)
+const client = require('./client');
+const {createActivity,
+  getAllActivities,
+  updateActivity,
+  getActivityById,} = require('./activities');
+const {addActivityToRoutine,
+  updateRoutineActivity,
+  destroyRoutineActivity,
+  getRoutineActivitiesByRoutine,} = require('./routine_activities');
+const {createRoutine,
+  getRoutineById,
+  getRoutinesWithoutActivities,
+  getAllRoutines,
+  getAllPublicRoutines,
+  getAllRoutinesByUser,
+  getPublicRoutinesByUser,
+  getPublicRoutinesByActivity,
+  updateRoutine,
+  destroyRoutine,
+  } =  require('./routines');
+
+const {createUser, getUser, getUserById, getUserByUsername} =  require('./users');
 
 
 module.exports = {
-  client: require('./client'),
-  Activities: require('./activities'),
-  Routine_activities: require('./routine_activities'),
-  Routines: require('./routines'),
-  Seed: require('./seed'),
-  SeedData: require('./seedData'),
-  Users: require('./users'),
-
+  createUser,
+  getUserByUsername,
+  createActivity,
+  createRoutine,
+  getRoutineById,
+  updateRoutine,
+  getRoutinesWithoutActivities,
+  getAllActivities,
+  addActivityToRoutine,
+  getUser,
+  getUserById,
+  updateActivity,
+  getActivityById,
+  getAllRoutines,
+  getAllPublicRoutines,
+  getAllRoutinesByUser,
+  getPublicRoutinesByUser,
+  getPublicRoutinesByActivity,
+  destroyRoutine,
+  getRoutineActivitiesByRoutine,
+  updateRoutineActivity,
+  destroyRoutineActivity,
 };

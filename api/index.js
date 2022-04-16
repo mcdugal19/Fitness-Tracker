@@ -8,7 +8,9 @@ const { JWT_SECRET } = process.env;
 const express = require("express");
 const appRouter = express.Router();
 
-
+appRouter.get('/health', (req, res, next)=> {
+    res.send({ message: 'Server is healthy...'});
+});
 
 appRouter.use(async (req, res, next) => {
     const prefix = "Bearer ";

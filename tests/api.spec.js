@@ -64,7 +64,7 @@ describe('API', () => {
           tooShortResponse = err.response;
         }
       });
-      xit('Creates a new user.', () => {
+      it('Creates a new user.', () => {
         expect(typeof registeredUser).toEqual('object');
         expect(registeredUser.username).toEqual(newUser.username);
       });

@@ -5,10 +5,11 @@ const { PORT = 3000 } = process.env;
 
 const express = require("express")
 const cors = require('cors')
-const app = express()
+const app = express();
+const appRouter = require("./api");
 const morgan = require("morgan");
 
-const appRouter = require("./api");
+
 
 app.use(morgan("dev"));
 app.use(cors());
@@ -25,20 +26,21 @@ app.use((req, res, next) => {
 
 app.use("/api", appRouter);
 
-app.use((req, res, next) => {
-    const token = req.header('token')
-    console.log('TOKEN->', token)
-    if(!token){
-        res.status(404).send('You are un-authorized!')
-        return
-    }
-})
+// app.use((req, res, next) => {
+//     const token = req.header('token')
+//     console.log('TOKEN->', token)
+//     if(!token){
+//         res.status(404).send('You are un-authorized!')
+//         return
+//     }
+// })
 
-app.use((error, req, res, next) => {
-    res.send({ success: false, message: error.message })
-})
+// app.use((error, req, res, next) => {
+//     res.send({ success: false, message: error.message })
+// })
 
-
+const client = require('./db/client');
+client.connect();
 
 app.listen(PORT, () => {
   console.log(`CORS-enabled web server listening on port`, PORT);

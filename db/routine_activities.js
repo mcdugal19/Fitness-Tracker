@@ -1,4 +1,4 @@
-const client = require("./client");
+const client = require("../client");
 
 async function addActivitiesToRoutines({ routineId, activityId, count, duration }) {
     try {

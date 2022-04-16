@@ -3,24 +3,25 @@
 // export the api router
 
 
-
-const { getUserById } = require("../db/users");
-const { JWT_SECRET } = process.env;
 const express = require("express");
-const appRouter = express.Router();
+// const { getUserById } = require("../db/users");
+const { JWT_SECRET } = process.env;
+
+const apiRouter = express.Router();
+require('dotenv').config();
+
+
 const jwt = require("jsonwebtoken");
 
-appRouter.get('/health', (req, res, next)=> {
-    res.send({ message: 'Server is healthy...'});
+
+apiRouter.get('/health', (req, res, next)=> {
+    res.send({ message: 'Server is healthy...'})
+    next();
 });
 
-const usersRouter = require('./users');
-appRouter.use('/users', usersRouter);
-
-
-
-
-// appRouter.use(async (req, res, next) => {
+const usersRouter = require("./users");
+apiRouter.use("/users", usersRouter);
+// apiRouter.use(async (req, res, next) => {
 //     const prefix = "Bearer ";
 //     const auth = req.header("Authorization");
 
@@ -47,11 +48,11 @@ appRouter.use('/users', usersRouter);
 //     }
 // });
 
-// appRouter.use((req, res, next) => {
-//     if (req.user) {
-//         console.log("user is set:", req.user);
-//     }
-//     next();
-// });
+apiRouter.use((error, req, res, next) => {
+    res.send({
+        name: error.name,
+        message: error.message
+    });
+});
 
-module.exports = appRouter;
+module.exports =  apiRouter;

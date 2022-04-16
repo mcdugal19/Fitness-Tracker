@@ -22,7 +22,7 @@ const {
   createRoutine,
   getRoutineActivityById,
 } = require('../db');
-const client = require('../db/client');
+const client = require('../client');
 
 describe('API', () => {
   let token, registeredUser;

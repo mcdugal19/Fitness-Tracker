@@ -7,7 +7,7 @@ const { getUserById } = require("../db/users");
 const { JWT_SECRET } = process.env;
 
 const apiRouter = express.Router();
-// require("dotenv").config();
+
 
 const jwt = require("jsonwebtoken");
 
@@ -59,12 +59,5 @@ const routinesRouter = require("./routines");
 apiRouter.use('/routines', routinesRouter);
 const routine_activitiesRouter = require("./routine_activities");
 apiRouter.use('/routine_activities', routine_activitiesRouter);
-
-// apiRouter.use((error, req, res, next) => {
-//   res.send({
-//     name: error.name,
-//     message: error.message,
-//   });
-// });
 
 module.exports = apiRouter;

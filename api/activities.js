@@ -2,7 +2,7 @@ const { requireUser } = require("./utils");
 const express = require("express");
 const activitiesRouter = express.Router();
 
-const { createActivity, getAllActivities, updateActivity, getPublicRoutinesByActivity, getActivityById } = require("../db") 
+const { createActivity, getAllActivities, updateActivity, getPublicRoutinesByActivity } = require("../db") 
 
 activitiesRouter.use((req, res, next) => {
     console.log("Request from activities");

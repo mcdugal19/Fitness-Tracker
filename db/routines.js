@@ -1,4 +1,3 @@
-// const { getAllPublicRoutines } = require(".");
 const client = require("./client");
 const { attachActivitiesToRoutines } = require("./activities");
 const { getUserByUsername } = require("./users");

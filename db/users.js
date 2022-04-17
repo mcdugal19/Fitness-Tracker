@@ -75,12 +75,6 @@ async function getUserByUsername(username) {
       `,
       [username]
     );
-
-    // if (!user) {
-    //   return null;
-    // }
-
-    // delete user.password;
       console.log('userDB: ', user)
     return user;
   } catch (error) {

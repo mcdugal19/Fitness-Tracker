@@ -6,7 +6,6 @@ const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
 const client = require("./db/client");
-// const res = require("express/lib/response");
 const app = express();
 
 app.use(morgan("dev"));
@@ -27,7 +26,7 @@ app.use((req, res, next) => {
 const apiRouter = require("./api");
 app.use("/api", apiRouter);
 
-// const client = require("./db/index");c
+
 
 const { PORT = 3000 } = process.env;
 

@@ -50,7 +50,6 @@ activitiesRouter.get('/:activityId/routines', async (req, res, next) =>{
     const { activityId } = req.params
     try {
         const publicRoutines = await getPublicRoutinesByActivity({id:activityId});
-        console.log('publicRoutines: ',publicRoutines)
         res.send(publicRoutines);
     } catch (error) {
         next(error);

@@ -21,10 +21,9 @@ usersRouter.post("/register", async (req, res, next) => {
   try {
     if (password.length >= 8) {
       const _user = await getUserByUsername(username);
-      console.log('_user: ', _user)
       if (!_user) {
         const user = await createUser({ username, password });
-            console.log('user: create: ', user)
+            
         const token = jwt.sign(
           {
             id: user.id,
@@ -35,7 +34,7 @@ usersRouter.post("/register", async (req, res, next) => {
             expiresIn: "1w",
           }
         );
-        console.log('token from Users: ', token)
+       
         res.send({
           message: "thank you for signing up",
           token,
@@ -65,7 +64,7 @@ usersRouter.post("/login", async (req, res, next) => {
 
   try {
     const user = await getUserByUsername(username);
-    console.log("user", user);
+   
     if (user && user.password == password) {
       const token = jwt.sign(
         { username: username, id: user.id },
@@ -79,7 +78,7 @@ usersRouter.post("/login", async (req, res, next) => {
       });
     }
   } catch (error) {
-    console.log(error);
+    
     next(error);
   }
 });

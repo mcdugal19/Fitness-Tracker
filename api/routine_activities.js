@@ -16,7 +16,6 @@ routine_activitiesRouter.patch('/:routineActivityId', requireUser, async (req, r
 
         if (routine.creatorId === req.user.id){
             const updatedActivity = await updateRoutineActivity( updateObj )
-            console.log('updatedActivity: ', updatedActivity)
             res.send(updatedActivity)
         } else {
             next({name: 'UserAuthError', message: 'You must be the creator to update this routine'})
@@ -36,7 +35,6 @@ routine_activitiesRouter.delete('/:routineActivityId', requireUser, async ( req,
 
         if( routine.creatorId === req.user.id){
             const deletedRoutineActivity = await destroyRoutineActivity( routineActivityId );
-            console.log('deleted: ', deletedRoutineActivity)
             res.send(deletedRoutineActivity)
         } else {next({ name: 'UserAuthError' , message:'You must be the routine creator to delete this activity' })
         }

@@ -79,8 +79,6 @@ async function createActivity({ name, description }) {
 }
 
 async function updateActivity({ id, name, description }) {
-  console.log('name: ', name)
-  console.log('desc: ', description)
   try {
     const {
       rows: [activity],
@@ -94,7 +92,7 @@ async function updateActivity({ id, name, description }) {
       `,
       [name, description, id]
     );
-    console.log('update_Activity: ', activity)
+   
     return activity;
   } catch (error) {
     throw error;

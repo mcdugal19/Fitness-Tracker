@@ -13,7 +13,7 @@ async function createUser({ username, password }) {
         `,
       [username, password]
     );
-    console.log("user from usersDB: ", user);
+   
     return user;
   } catch (error) {
     throw error;
@@ -75,7 +75,7 @@ async function getUserByUsername(username) {
       `,
       [username]
     );
-      console.log('userDB: ', user)
+   
     return user;
   } catch (error) {
     console.error('error getting User')
